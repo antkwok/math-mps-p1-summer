@@ -1,0 +1,29 @@
+{
+  "name": "math-pwa",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "phase2:smoke": "tsx src/lib/dev/phase2-smoke.ts",
+    "phase3:smoke": "tsx src/lib/dev/phase3-smoke.ts",
+    "phase5:smoke": "tsx src/lib/dev/phase5-smoke.ts"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@tsconfig/svelte": "^5.0.8",
+    "@types/node": "^24.12.3",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "svelte": "^5.55.5",
+    "svelte-check": "^4.4.8",
+    "tailwindcss": "^4.3.1",
+    "tsx": "^4.22.4",
+    "typescript": "~6.0.2",
+    "vite": "^8.0.12",
+    "vite-plugin-pwa": "^1.3.0"
+  }
+}
