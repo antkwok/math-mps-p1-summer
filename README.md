@@ -20,8 +20,11 @@ A Web PWA migration of the original Flutter math practice app.
 - `src/lib/components/ProgressCard.svelte` - mission progress + celebration banner
 - `src/lib/components/PartASection.svelte` - Part A card draw and word check UI
 - `src/lib/components/PartBSection.svelte` - Part B equations and answer reveal UI
+- `src/lib/components/MultiplicationReview.svelte` - 九因歌 review grid with Cantonese readout
 - `src/App.svelte` - top-level app layout connected to store actions
 - `src/lib/services/storage.ts` - validated localStorage read/write helpers
+- `src/lib/utils/audio.ts` - lightweight shuffle and celebration sound effects
+- `src/lib/utils/chineseNumbers.ts` - Chinese numeral helpers for multiplication review
 - `src/lib/dev/phase5-smoke.ts` - smoke test for persistence and date reset rules
 
 ## Scripts
@@ -75,5 +78,4 @@ npm run dev
 5. After deployment, site URL is:
    - `https://<your-github-username>.github.io/<your-repo-name>/`
 
-This project is in `math-pwa/`, so the workflow builds from that folder and publishes `math-pwa/dist`.
-
+This project is in `math-mps-p1-summer/`, so the workflow builds from that folder and publishes `math-mps-p1-summer/dist`.
