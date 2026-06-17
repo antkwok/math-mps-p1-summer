@@ -4,6 +4,7 @@
   import PartASection from './lib/components/PartASection.svelte'
   import PartBSection from './lib/components/PartBSection.svelte'
   import MultiplicationReview from './lib/components/MultiplicationReview.svelte'
+  import EnglishVocab from './lib/components/EnglishVocab.svelte'
   import ChecklistSection from './lib/components/ChecklistSection.svelte'
   import ProgressCard from './lib/components/ProgressCard.svelte'
   import {
@@ -110,6 +111,10 @@
       }}
       onToggleAnswers={() => practiceStore.togglePartBAnswers()}
     />
+  </div>
+
+  <div class="review-panel">
+    <EnglishVocab />
   </div>
 
   <div class="review-panel">

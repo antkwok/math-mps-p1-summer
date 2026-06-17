@@ -28,7 +28,7 @@
   {#if progress.isComplete}
     <div class="celebration" aria-live="polite">
       <span class="crown">👑</span>
-      <p>🎉 太棒了！你完成了今天的練習！</p>
+      <p>🎉 Awesome! You completed today's practice!</p>
     </div>
   {/if}
 </section>
