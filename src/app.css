@@ -285,6 +285,23 @@ code {
   margin-top: 12px;
 }
 
+.table-headings,
+.multiplication-grid {
+  display: grid;
+  grid-template-columns: 40px repeat(9, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.table-headings span,
+.row-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #1d4ed8;
+}
+
 .table-tab,
 .fact-button {
   background: #f3f4f6;
@@ -299,30 +316,19 @@ code {
   color: #1d4ed8;
 }
 
-.fact-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 8px;
-  margin-top: 12px;
-}
-
 .fact-button {
-  min-height: 70px;
+  min-height: 52px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  font-size: 0.92rem;
+  line-height: 1.15;
+  padding: 8px 6px;
 }
 
-.fact-button span {
-  font-size: 1.05rem;
-}
-
-.fact-button small {
-  font-size: 0.9rem;
-  color: #6b7280;
-}
+.multiplication-grid .fact-button { width: 100%; }
 
 .big-number {
   margin: 14px 0;

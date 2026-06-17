@@ -1,14 +1,16 @@
 <script lang="ts">
   import { onMount } from 'svelte'
 
-  import { factorToChineseLabel, numberToChineseNumerals } from '../utils/chineseNumbers'
+  import { numberToChineseNumerals } from '../utils/chineseNumbers'
+  import {
+    getMultiplicationReadout,
+    MULTIPLICATION_COLUMNS,
+    MULTIPLICATION_ROWS
+  } from '../utils/multiplicationReadout'
 
-  const factors = Array.from({ length: 10 }, (_, index) => index + 1)
-
-  let selectedTable = 3
-  let selectedFact = 7
-  let selectedAnswer = numberToChineseNumerals(selectedTable * selectedFact)
-  let selectedQuestion = `${factorToChineseLabel(selectedTable)}${factorToChineseLabel(selectedFact)}`
+  let selectedRow = 3
+  let selectedColumn = 7
+  let selectedReadout = getMultiplicationReadout(selectedRow, selectedColumn)
 
   onMount(() => {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
@@ -18,12 +20,12 @@
     window.speechSynthesis.getVoices()
   })
 
-  function speakAnswer(question: string, answer: string): void {
+  function speakReadout(readout: string): void {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
       return
     }
 
-    const utterance = new SpeechSynthesisUtterance(`${question}，${answer}`)
+    const utterance = new SpeechSynthesisUtterance(readout)
     const voices = window.speechSynthesis.getVoices()
     const preferredVoice =
       voices.find((voice) => voice.lang.toLowerCase().includes('yue')) ??
@@ -42,18 +44,11 @@
     window.speechSynthesis.speak(utterance)
   }
 
-  function selectTable(table: number): void {
-    selectedTable = table
-    selectedFact = 1
-    selectedQuestion = `${factorToChineseLabel(selectedTable)}${factorToChineseLabel(selectedFact)}`
-    selectedAnswer = numberToChineseNumerals(selectedTable * selectedFact)
-  }
-
-  function selectFact(fact: number): void {
-    selectedFact = fact
-    selectedQuestion = `${factorToChineseLabel(selectedTable)}${factorToChineseLabel(selectedFact)}`
-    selectedAnswer = numberToChineseNumerals(selectedTable * selectedFact)
-    speakAnswer(selectedQuestion, selectedAnswer)
+  function selectCell(row: number, column: number): void {
+    selectedRow = row
+    selectedColumn = column
+    selectedReadout = getMultiplicationReadout(row, column)
+    speakReadout(selectedReadout)
   }
 </script>
 
@@ -63,38 +58,32 @@
     <span class="badge">1 - 10</span>
   </div>
 
-  <p class="hint">先選一個乘數，再點題目。會顯示答案，也會嘗試用廣東話朗讀。</p>
+  <p class="hint">點一下任何一格，會顯示並嘗試朗讀你提供的標準讀法。</p>
 
-  <div class="table-tabs" aria-label="Multiplication table selector">
-    {#each factors as factor}
-      <button
-        class:active={factor === selectedTable}
-        class="table-tab"
-        type="button"
-        aria-pressed={factor === selectedTable}
-        on:click={() => selectTable(factor)}
-      >
-        {factorToChineseLabel(factor)}
-      </button>
+  <div class="table-headings">
+    <span></span>
+    {#each MULTIPLICATION_COLUMNS as column}
+      <span>{numberToChineseNumerals(column)}</span>
     {/each}
   </div>
 
-  <div class="fact-grid" aria-label="Multiplication facts">
-    {#each factors as fact}
-      <button
-        class:active={fact === selectedFact}
-        class="fact-button"
-        type="button"
-        aria-label={`${selectedTable} times ${fact}`}
-        on:click={() => selectFact(fact)}
-      >
-        <span>{factorToChineseLabel(selectedTable)}{factorToChineseLabel(fact)}</span>
-        <small>{numberToChineseNumerals(selectedTable * fact)}</small>
-      </button>
+  <div class="multiplication-grid" aria-label="Nine times table readout grid">
+    {#each MULTIPLICATION_ROWS as row}
+      <span class="row-label">{numberToChineseNumerals(row)}</span>
+
+      {#each MULTIPLICATION_COLUMNS as column}
+        <button
+          class:active={row === selectedRow && column === selectedColumn}
+          class="fact-button"
+          type="button"
+          aria-label={getMultiplicationReadout(row, column)}
+          on:click={() => selectCell(row, column)}
+        >
+          {getMultiplicationReadout(row, column)}
+        </button>
+      {/each}
     {/each}
   </div>
 
-  <p class="answer review-answer" aria-live="polite">
-    {selectedQuestion} = {selectedAnswer}
-  </p>
+  <p class="answer review-answer" aria-live="polite">{selectedReadout}</p>
 </section>
