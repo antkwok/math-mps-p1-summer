@@ -4,6 +4,10 @@ import {
   savePersistedPracticeState,
   loadPersistedPracticeState,
   toPersistedPracticeState,
+  parsePersistedProfileState,
+  PROFILE_STORAGE_KEY,
+  savePersistedProfileState,
+  loadPersistedProfileState,
   type PersistedPracticeState
 } from '../services/storage'
 import { createStateFromPersistence } from '../stores/practiceStore'
@@ -49,6 +53,11 @@ savePersistedPracticeState(baseState, storage, '2026-06-16')
 const loaded = loadPersistedPracticeState(storage)
 assert(loaded !== null, 'Saved payload should be loadable')
 assert(loaded?.lastActiveDate === '2026-06-16', 'Date should be saved')
+
+savePersistedProfileState({ studentName: ' Alyssa ' }, storage)
+const profile = loadPersistedProfileState(storage)
+assert(profile?.studentName === 'Alyssa', 'Profile name should be normalized')
+assert(parsePersistedProfileState(storage.getItem(PROFILE_STORAGE_KEY))?.studentName === 'Alyssa', 'Profile payload should parse')
 
 const restoredToday = createStateFromPersistence(loaded as PersistedPracticeState, '2026-06-16')
 assert(restoredToday.partADone === 3 && restoredToday.partBDone === 7, 'Same-day restore keeps counters')

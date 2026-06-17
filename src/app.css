@@ -180,6 +180,7 @@ code {
   max-width: 960px;
   margin: 0 auto;
   padding: 20px;
+  position: relative;
 }
 
 .app-header {
@@ -200,6 +201,45 @@ code {
   margin-top: 10px;
   font-weight: 700;
   color: #7c3aed;
+}
+
+.name-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.42);
+  z-index: 20;
+}
+
+.name-card {
+  width: min(100%, 440px);
+  text-align: left;
+}
+
+.name-card h2 {
+  margin-bottom: 6px;
+}
+
+.name-card p {
+  margin-bottom: 12px;
+}
+
+.name-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.name-input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font: inherit;
+  margin-bottom: 12px;
 }
 
 .grid {

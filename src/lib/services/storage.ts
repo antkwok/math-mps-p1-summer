@@ -1,6 +1,7 @@
 import { PART_A_GOAL, PART_B_GOAL, type PracticeState } from '../types/practice'
 
 export const PRACTICE_STORAGE_KEY = 'math-pwa.practice.v1'
+export const PROFILE_STORAGE_KEY = 'math-pwa.profile.v1'
 
 export interface PersistedPracticeState {
   lastActiveDate: string
@@ -8,6 +9,10 @@ export interface PersistedPracticeState {
   partBDone: number
   stars: number
   celebrationShown: boolean
+}
+
+export interface PersistedProfileState {
+  studentName: string
 }
 
 interface StorageLike {
@@ -33,6 +38,16 @@ function asBoolean(value: unknown): boolean | null {
 
 function asNonEmptyString(value: unknown): string | null {
   return typeof value === 'string' && value.trim().length > 0 ? value : null
+}
+
+export function normalizeStudentName(value: string): string | null {
+  const trimmed = value.trim()
+
+  if (!trimmed) {
+    return null
+  }
+
+  return trimmed.slice(0, 40)
 }
 
 export function parsePersistedPracticeState(raw: string | null): PersistedPracticeState | null {
@@ -115,3 +130,54 @@ export function savePersistedPracticeState(
   storage.setItem(PRACTICE_STORAGE_KEY, JSON.stringify(payload))
 }
 
+export function parsePersistedProfileState(raw: string | null): PersistedProfileState | null {
+  if (!raw) {
+    return null
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(raw)
+
+    if (!parsed || typeof parsed !== 'object') {
+      return null
+    }
+
+    const value = parsed as Record<string, unknown>
+    const studentName = asNonEmptyString(value.studentName)
+
+    if (studentName === null) {
+      return null
+    }
+
+    return {
+      studentName: normalizeStudentName(studentName) ?? studentName
+    }
+  } catch {
+    return null
+  }
+}
+
+export function loadPersistedProfileState(storage = getBrowserStorage()): PersistedProfileState | null {
+  if (!storage) {
+    return null
+  }
+
+  return parsePersistedProfileState(storage.getItem(PROFILE_STORAGE_KEY))
+}
+
+export function savePersistedProfileState(
+  state: PersistedProfileState,
+  storage = getBrowserStorage()
+): void {
+  if (!storage) {
+    return
+  }
+
+  const normalizedName = normalizeStudentName(state.studentName)
+
+  if (!normalizedName) {
+    return
+  }
+
+  storage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({ studentName: normalizedName }))
+}
