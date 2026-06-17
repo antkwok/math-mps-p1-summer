@@ -443,3 +443,65 @@ button.secondary {
     transform: translateY(-4px);
   }
 }
+
+.checklist-panel {
+  margin-top: 16px;
+}
+
+.checklist-card {
+  background: linear-gradient(160deg, #f0fdf4 0%, #ffffff 100%);
+}
+
+.checklist-items {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.checklist-item:hover {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+.checklist-item input[type='checkbox'] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.checklist-item input[type='checkbox']:checked {
+  accent-color: #10b981;
+}
+
+.item-text {
+  flex: 1;
+  font-size: 0.95rem;
+  color: #374151;
+  line-height: 1.4;
+}
+
+.checklist-item input[type='checkbox']:checked + .item-text {
+  color: #10b981;
+  text-decoration: line-through;
+  font-weight: 500;
+}
+
+.trophy {
+  display: inline-block;
+  margin-right: 6px;
+  animation: bounce 1000ms infinite;
+}

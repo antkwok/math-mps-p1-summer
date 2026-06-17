@@ -1,7 +1,9 @@
 import { PART_A_GOAL, PART_B_GOAL, type PracticeState } from '../types/practice'
+import { DEFAULT_CHECKLIST_ITEMS, type ChecklistItem } from '../types/checklist'
 
 export const PRACTICE_STORAGE_KEY = 'math-pwa.practice.v1'
 export const PROFILE_STORAGE_KEY = 'math-pwa.profile.v1'
+export const CHECKLIST_STORAGE_KEY = 'math-pwa.checklist.v1'
 
 export interface PersistedPracticeState {
   lastActiveDate: string
@@ -13,6 +15,10 @@ export interface PersistedPracticeState {
 
 export interface PersistedProfileState {
   studentName: string
+}
+
+export interface PersistedChecklistState {
+  items: Array<{ id: string; completed: boolean }>
 }
 
 interface StorageLike {
@@ -180,4 +186,75 @@ export function savePersistedProfileState(
   }
 
   storage.setItem(PROFILE_STORAGE_KEY, JSON.stringify({ studentName: normalizedName }))
+}
+
+export function parsePersistedChecklistState(raw: string | null): PersistedChecklistState | null {
+  if (!raw) {
+    return null
+  }
+
+  try {
+    const parsed: unknown = JSON.parse(raw)
+
+    if (!parsed || typeof parsed !== 'object') {
+      return null
+    }
+
+    const value = parsed as Record<string, unknown>
+    const items = value.items
+
+    if (!Array.isArray(items)) {
+      return null
+    }
+
+    return {
+      items: items.map((item: unknown) => {
+        if (typeof item === 'object' && item !== null) {
+          const obj = item as Record<string, unknown>
+          const id = typeof obj.id === 'string' ? obj.id : ''
+          return {
+            id,
+            completed: asBoolean(obj.completed) ?? false
+          }
+        }
+        return { id: '', completed: false }
+      })
+    }
+  } catch {
+    return null
+  }
+}
+
+export function loadPersistedChecklistState(storage = getBrowserStorage()): ChecklistItem[] {
+  if (!storage) {
+    return DEFAULT_CHECKLIST_ITEMS.map((item) => ({ ...item, completed: false }))
+  }
+
+  const parsed = parsePersistedChecklistState(storage.getItem(CHECKLIST_STORAGE_KEY))
+
+  if (!parsed) {
+    return DEFAULT_CHECKLIST_ITEMS.map((item) => ({ ...item, completed: false }))
+  }
+
+  const completionMap = new Map(parsed.items.map((item) => [item.id, item.completed]))
+
+  return DEFAULT_CHECKLIST_ITEMS.map((item) => ({
+    ...item,
+    completed: completionMap.get(item.id) ?? false
+  }))
+}
+
+export function savePersistedChecklistState(items: ChecklistItem[], storage = getBrowserStorage()): void {
+  if (!storage) {
+    return
+  }
+
+  const payload: PersistedChecklistState = {
+    items: items.map((item) => ({
+      id: item.id,
+      completed: item.completed
+    }))
+  }
+
+  storage.setItem(CHECKLIST_STORAGE_KEY, JSON.stringify(payload))
 }

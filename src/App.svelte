@@ -4,6 +4,7 @@
   import PartASection from './lib/components/PartASection.svelte'
   import PartBSection from './lib/components/PartBSection.svelte'
   import MultiplicationReview from './lib/components/MultiplicationReview.svelte'
+  import ChecklistSection from './lib/components/ChecklistSection.svelte'
   import ProgressCard from './lib/components/ProgressCard.svelte'
   import {
     loadPersistedProfileState,
@@ -113,5 +114,9 @@
 
   <div class="review-panel">
     <MultiplicationReview />
+  </div>
+
+  <div class="checklist-panel">
+    <ChecklistSection />
   </div>
 </main>
