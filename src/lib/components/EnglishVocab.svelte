@@ -1,5 +1,6 @@
 <script lang="ts">
   import { SHAPES_2D, SHAPES_3D, DAYS_OF_WEEK, MONTHS_OF_YEAR } from '../types/english'
+  import Shape2DRenderer from './Shape2DRenderer.svelte'
 
   let activeTab = 'shapes-2d'
   let selectedShape2D = SHAPES_2D[0]
@@ -94,12 +95,18 @@
           on:click={() => selectShape2D(shape)}
           aria-label={shape.name}
         >
-          <span class="vocab-emoji">{shape.emoji}</span>
+          <Shape2DRenderer shapeId={shape.id} isSelected={shape.id === selectedShape2D.id} />
           <span class="vocab-name">{shape.name}</span>
         </button>
       {/each}
     </div>
-    <p class="vocab-display" aria-live="polite">{selectedShape2D.emoji} {selectedShape2D.name}</p>
+    <div class="vocab-display-3d" aria-live="polite">
+      <Shape2DRenderer shapeId={selectedShape2D.id} isSelected={true} />
+      <div class="display-text">
+        <p class="display-name">{selectedShape2D.name}</p>
+        <button class="speak-btn" on:click={() => speakWord(selectedShape2D.name)}>🔊 Hear</button>
+      </div>
+    </div>
   {/if}
 
   {#if activeTab === 'shapes-3d'}
@@ -190,7 +197,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    min-height: 70px;
+    min-height: 140px;
     padding: 8px;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
@@ -208,15 +215,57 @@
     border-color: #93c5fd;
   }
 
-  .vocab-emoji {
-    font-size: 1.8rem;
-  }
-
   .vocab-name {
     font-size: 0.8rem;
     font-weight: 600;
     color: #111827;
     text-align: center;
+  }
+
+  .vocab-display-3d {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 16px;
+    padding: 16px;
+    background: #f0f9ff;
+    border-radius: 8px;
+    min-height: 150px;
+  }
+
+  .vocab-display-3d > :first-child {
+    flex: 0 0 150px;
+    max-width: 150px;
+  }
+
+  .display-text {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .display-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1d4ed8;
+    margin: 0;
+  }
+
+  .speak-btn {
+    padding: 8px 16px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.2s;
+    width: fit-content;
+  }
+
+  .speak-btn:hover {
+    background: #2563eb;
   }
 
   .vocab-display {
