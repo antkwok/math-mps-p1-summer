@@ -17,8 +17,19 @@ declare module 'zdog' {
     height?: number
     depth?: number
     diameter?: number
+    length?: number
     color?: string
     stroke?: number | boolean
+    fill?: boolean
+    closed?: boolean
+    path?: Point3D[]
+    backface?: string | boolean
+    frontFace?: string | boolean
+    rearFace?: string | boolean
+    leftFace?: string | boolean
+    rightFace?: string | boolean
+    topFace?: string | boolean
+    bottomFace?: string | boolean
     translate?: Point3D
     rotate?: Point3D
   }
@@ -31,6 +42,7 @@ declare module 'zdog' {
 
     constructor(options: IllustrationOptions)
     render(): void
+    updateRenderGraph(): void
   }
 
   export class Group {

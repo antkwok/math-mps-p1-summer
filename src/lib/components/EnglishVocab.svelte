@@ -1,6 +1,7 @@
 <script lang="ts">
   import { SHAPES_2D, SHAPES_3D, DAYS_OF_WEEK, MONTHS_OF_YEAR } from '../types/english'
   import Shape2DRenderer from './Shape2DRenderer.svelte'
+  import Shape3DRenderer from './Shape3DRenderer.svelte'
 
   let activeTab = 'shapes-2d'
   let selectedShape2D = SHAPES_2D[0]
@@ -101,7 +102,9 @@
       {/each}
     </div>
     <div class="vocab-display-3d" aria-live="polite">
-      <Shape2DRenderer shapeId={selectedShape2D.id} isSelected={true} />
+      <div class="display-shape">
+        <Shape2DRenderer shapeId={selectedShape2D.id} isSelected={true} />
+      </div>
       <div class="display-text">
         <p class="display-name">{selectedShape2D.name}</p>
         <button class="speak-btn" on:click={() => speakWord(selectedShape2D.name)}>🔊 Hear</button>
@@ -118,12 +121,24 @@
           on:click={() => selectShape3D(shape)}
           aria-label={shape.name}
         >
-          <span class="vocab-emoji">{shape.emoji}</span>
+          <div class="shape-preview">
+            <Shape3DRenderer shapeId={shape.id} isSelected={shape.id === selectedShape3D.id} />
+          </div>
           <span class="vocab-name">{shape.name}</span>
         </button>
       {/each}
     </div>
-    <p class="vocab-display" aria-live="polite">{selectedShape3D.emoji} {selectedShape3D.name}</p>
+    <div class="vocab-display-3d" aria-live="polite">
+      <div class="display-shape">
+        {#key selectedShape3D.id}
+          <Shape3DRenderer shapeId={selectedShape3D.id} isSelected={true} />
+        {/key}
+      </div>
+      <div class="display-text">
+        <p class="display-name">{selectedShape3D.name}</p>
+        <button class="speak-btn" on:click={() => speakWord(selectedShape3D.name)}>🔊 Hear</button>
+      </div>
+    </div>
   {/if}
 
   {#if activeTab === 'days'}
@@ -176,6 +191,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    color: black;
   }
 
   .tab-buttons button.active {
@@ -197,7 +213,7 @@
     align-items: center;
     justify-content: center;
     gap: 6px;
-    min-height: 140px;
+    height: 150px;
     padding: 8px;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
@@ -222,6 +238,15 @@
     text-align: center;
   }
 
+  .shape-preview {
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
   .vocab-display-3d {
     display: flex;
     align-items: center;
@@ -233,9 +258,14 @@
     min-height: 150px;
   }
 
-  .vocab-display-3d > :first-child {
+  .display-shape {
     flex: 0 0 150px;
-    max-width: 150px;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
   }
 
   .display-text {
