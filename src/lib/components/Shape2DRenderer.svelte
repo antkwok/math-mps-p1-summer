@@ -83,35 +83,14 @@
     
     const x = SIZE / 2
     const y = SIZE / 2 - 5
-    const size = 25
-    
-    // Left lobe
-    ctx.bezierCurveTo(
-      x - size, y - size,
-      x - size * 1.5, y - size * 0.5,
-      x - size * 0.5, y + size * 0.3
-    )
-    
-    // Dip in middle
-    ctx.bezierCurveTo(
-      x - size * 0.3, y + size * 0.5,
-      x, y + size * 0.8,
-      x, y + size * 0.8
-    )
-    
-    // Right lobe
-    ctx.bezierCurveTo(
-      x, y + size * 0.8,
-      x + size * 0.3, y + size * 0.5,
-      x + size * 0.5, y + size * 0.3
-    )
-    
-    ctx.bezierCurveTo(
-      x + size * 1.5, y - size * 0.5,
-      x + size, y - size,
-      x, y - size * 0.8
-    )
-    
+    const radius = 1.3
+
+    for (let i = 0; i < 7; i += 0.1) {
+        const px = x + (radius * 16 * Math.pow(Math.sin( i ), 3) * radius)
+        const py = y + (-radius * (13 * Math.cos( i ) * radius - 5 * Math.cos( 2 * i ) - 2 * Math.cos( 3 * i ) - Math.cos( 4 * i )))
+        if (i === 0) ctx!.moveTo(px, py)
+        else ctx!.lineTo(px, py)
+    }
     ctx.closePath()
     ctx.fill()
   }
